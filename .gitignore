@@ -87,4 +87,5 @@ lint/tmp/
 .androidide
 app/build/
 app/.androidide
-keystore.properties
+keystore.propertieskeystore-info.txt
+snaptile-release.jks
