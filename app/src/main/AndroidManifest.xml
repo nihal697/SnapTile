@@ -28,7 +28,7 @@
         <service
             android:name=".ScreenshotTileService"
             android:exported="true"
-            android:icon="@drawable/ic_screenshot"
+            android:icon="@drawable/ic_tile_screenshot"
             android:label="@string/tile_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
             <intent-filter>
