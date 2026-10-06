@@ -103,7 +103,11 @@ public class ScreenshotChooserActivity extends Activity {
 
     private void pick(String mode) {
         finish();
-        getWindow().getDecorView().postDelayed(() -> {
+        // Give the chooser dialog time to fully detach before capturing.
+        // The old MediaProjection path took 850ms+ (consent + VirtualDisplay
+        // setup), which hid this race. The accessibility path fires in ~50ms,
+        // so SnipActivity used to land underneath the still-visible dialog.
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
             // Clean path first: accessibility service (no screen-record prompt).
             if (ScreenshotAccessibilityService.requestScreenshot(mode)) return;
             // Fallback: service not enabled / pre-API-28 -> legacy MediaProjection.
@@ -111,7 +115,7 @@ public class ScreenshotChooserActivity extends Activity {
             i.putExtra(EXTRA_MODE, mode);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
-        }, 50);
+        }, 350);
     }
 
     private View div() {
