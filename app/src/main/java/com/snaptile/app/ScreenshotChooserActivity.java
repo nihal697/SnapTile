@@ -17,7 +17,10 @@ import android.widget.TextView;
  * Lightweight modal chooser shown after the Quick Settings tile is tapped.
  *
  * The chooser does not capture anything itself. It only turns the user's selection
- * into one of the mode constants consumed by {CaptureActivity}.
+ * into one of the mode constants consumed by the screenshot flow.
+ *
+ * Preferred path is ScreenshotAccessibilityService (no MediaProjection consent).
+ * CaptureActivity (MediaProjection) is kept only as a pre-API-28 fallback.
  */
 public class ScreenshotChooserActivity extends Activity {
 
@@ -101,6 +104,9 @@ public class ScreenshotChooserActivity extends Activity {
     private void pick(String mode) {
         finish();
         getWindow().getDecorView().postDelayed(() -> {
+            // Clean path first: accessibility service (no screen-record prompt).
+            if (ScreenshotAccessibilityService.requestScreenshot(mode)) return;
+            // Fallback: service not enabled / pre-API-28 -> legacy MediaProjection.
             Intent i = new Intent(this, CaptureActivity.class);
             i.putExtra(EXTRA_MODE, mode);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
