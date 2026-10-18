@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SnapTile</string>
-    <string name="tile_label">SnapTile</string>
+    <string name="app_name">Tile</string>
+    <string name="tile_label">Tile</string>
     <string name="take_screenshot">Take Screenshot</string>
     <string name="full_screen">Full Screen</string>
     <string name="region_select">Select Region</string>
