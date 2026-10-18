@@ -27,6 +27,8 @@
     <string name="banking_mode_settings">Turn SnapTile off under Accessibility settings</string>
     <string name="diagnostics_title">Accessibility diagnostics</string>
     <string name="diagnostics_btn">Diagnostics: what scanners see</string>
+    <string name="diagnostics_copy">Copy all</string>
+    <string name="diagnostics_copied">Copied — paste it anywhere</string>
 
     <!-- Capture method (1.2.0). Both methods are real; the honest trade-off is
          spelled out in each description rather than hidden behind a toggle. -->

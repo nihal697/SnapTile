@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.text.method.ScrollingMovementMethod;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -59,18 +61,39 @@ public class DiagnosticsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setTitle(R.string.diagnostics_title);
 
+        String report = buildReport();
+
         TextView tv = new TextView(this);
         tv.setTypeface(android.graphics.Typeface.MONOSPACE);
         tv.setTextSize(11f);
+        // Selectable already; the button above is what makes that discoverable,
+        // and is the only practical way to get the whole dump off the phone.
         tv.setTextIsSelectable(true);
         tv.setMovementMethod(new ScrollingMovementMethod());
         int pad = Math.round(14 * getResources().getDisplayMetrics().density);
         tv.setPadding(pad, pad, pad, pad);
-        tv.setText(buildReport());
+        tv.setText(report);
 
+        Button copy = new Button(this);
+        copy.setText(R.string.diagnostics_copy);
+        copy.setOnClickListener(v -> {
+            android.content.ClipboardManager cm = (android.content.ClipboardManager)
+                    getSystemService(CLIPBOARD_SERVICE);
+            if (cm != null) {
+                cm.setPrimaryClip(android.content.ClipData.newPlainText(
+                        "SnapTile diagnostics", report));
+            }
+            Toast.makeText(this, R.string.diagnostics_copied, Toast.LENGTH_SHORT).show();
+        });
+
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.addView(copy);
         ScrollView sc = new ScrollView(this);
         sc.addView(tv);
-        setContentView(sc);
+        root.addView(sc, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+        setContentView(root);
     }
 
     private String buildReport() {
