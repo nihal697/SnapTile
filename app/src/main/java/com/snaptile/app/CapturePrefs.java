@@ -11,7 +11,7 @@ import android.provider.Settings;
  *
  * Two methods, both real, and the choice is the user's:
  *
- *  - NATIVE (default) goes through {@link ScreenshotAccessibilityService}. No
+ *  - NATIVE (default) goes through {@link TileAccessibilityService}. No
  *    consent dialog, no screen-recording indicator: one tap on the tile and the
  *    shot is taken. Full screen uses the system screenshot action (native popup,
  *    system saves). Region and full+paint use takeScreenshot() for the in-app
@@ -72,7 +72,7 @@ public final class CapturePrefs {
      * service class without going stale.
      */
     public static boolean isAccessibilityEnabled(Context c) {
-        if (ScreenshotAccessibilityService.isEnabled()) return true;
+        if (TileAccessibilityService.isEnabled()) return true;
         String enabled = Settings.Secure.getString(
                 c.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
         return enabled != null && enabled.contains(c.getPackageName() + "/");
@@ -88,7 +88,7 @@ public final class CapturePrefs {
      */
     public static void request(Context c, String mode) {
         if (!isLegacy(c)) {
-            if (ScreenshotAccessibilityService.requestScreenshot(mode)) return;
+            if (TileAccessibilityService.requestScreenshot(mode)) return;
             startSetup(c, AccessibilitySetupActivity.REASON_NOT_ENABLED);
             return;
         }

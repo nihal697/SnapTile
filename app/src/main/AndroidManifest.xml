@@ -127,7 +127,7 @@
              that test came back negative, and a second accessibility entry in a
              shipped app is a liability rather than a feature. -->
         <service
-            android:name=".ScreenshotAccessibilityService"
+            android:name=".TileAccessibilityService"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

@@ -19,7 +19,7 @@ import android.widget.TextView;
  * The chooser does not capture anything itself. It only turns the user's selection
  * into one of the mode constants consumed by the screenshot flow.
  *
- * Preferred path is ScreenshotAccessibilityService (no MediaProjection consent).
+ * Preferred path is TileAccessibilityService (no MediaProjection consent).
  * CaptureActivity (MediaProjection) is kept only as a pre-API-28 fallback.
  */
 public class ScreenshotChooserActivity extends Activity {

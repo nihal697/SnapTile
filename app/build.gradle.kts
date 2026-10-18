@@ -55,8 +55,8 @@ android {
             // Test builds install alongside the release app: distinct package
             // (debug cert already differs from the upload key).
             applicationIdSuffix = ".debug"
-            resValue("string", "app_name", "SnapTile Debug")
-            resValue("string", "tile_label", "SnapTile Debug")
+            resValue("string", "app_name", "Tile Debug")
+            resValue("string", "tile_label", "Tile Debug")
         }
         getByName("release") {
             isMinifyEnabled = false

@@ -41,9 +41,9 @@ import androidx.annotation.RequiresApi;
  * Tile / chooser never call the platform APIs directly; only the bound
  * AccessibilityService instance can. They go through requestScreenshot().
  */
-public class ScreenshotAccessibilityService extends AccessibilityService {
+public class TileAccessibilityService extends AccessibilityService {
 
-    private static ScreenshotAccessibilityService sInstance;
+    private static TileAccessibilityService sInstance;
     private static String sPendingMode = ScreenshotChooserActivity.MODE_FULL;
 
     /** Called from Tile / Chooser. Returns false when the service is not enabled. */
@@ -78,7 +78,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
     public static boolean disableForBanking() {
         // disableSelf() was added in API 24 (Nougat).
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return false;
-        ScreenshotAccessibilityService svc = sInstance;
+        TileAccessibilityService svc = sInstance;
         if (svc == null) return false;
         try {
             svc.disableSelf();
@@ -306,7 +306,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
 
     private void toast(String msg) {
         new Handler(Looper.getMainLooper()).post(() ->
-                Toast.makeText(ScreenshotAccessibilityService.this,
+                Toast.makeText(TileAccessibilityService.this,
                         msg, Toast.LENGTH_SHORT).show());
     }
 }

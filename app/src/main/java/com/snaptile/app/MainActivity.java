@@ -121,7 +121,7 @@ public class MainActivity extends Activity {
         if (CapturePrefs.LEGACY.equals(method) && !wasLegacy) {
             // Legacy exists to keep the service off; leaving it on would mean the
             // user paid the warning for nothing.
-            ScreenshotAccessibilityService.disableForBanking();
+            TileAccessibilityService.disableForBanking();
             prefs().edit().putBoolean(KEY_BANKING_OFF, true).apply();
             Toast.makeText(this, R.string.method_legacy_toast, Toast.LENGTH_LONG).show();
         } else if (CapturePrefs.NATIVE.equals(method) && wasLegacy) {
@@ -183,7 +183,7 @@ public class MainActivity extends Activity {
         // captures must route to MediaProjection either way - but only a real
         // disableSelf() is allowed to claim the warning is gone.
         CapturePrefs.setMethod(this, CapturePrefs.LEGACY);
-        boolean disabled = ScreenshotAccessibilityService.disableForBanking();
+        boolean disabled = TileAccessibilityService.disableForBanking();
         prefs().edit().putBoolean(KEY_BANKING_OFF, disabled).apply();
         refreshMethodCard();
         refreshAccessCard();
@@ -204,7 +204,7 @@ public class MainActivity extends Activity {
         Button banking = findViewById(R.id.btnBankingOff);
         if (title == null || enable == null) return;
 
-        boolean bound = ScreenshotAccessibilityService.isEnabled();
+        boolean bound = TileAccessibilityService.isEnabled();
         if (bound) {
             // Service is genuinely bound again — banking mode is no longer in effect.
             prefs().edit().putBoolean(KEY_BANKING_OFF, false).apply();
@@ -243,7 +243,7 @@ public class MainActivity extends Activity {
         // lags for a moment. Trust our own action so the card flips immediately
         // instead of briefly claiming the service is still on.
         if (prefs().getBoolean(KEY_BANKING_OFF, false)
-                && !ScreenshotAccessibilityService.isEnabled()) {
+                && !TileAccessibilityService.isEnabled()) {
             return false;
         }
         // Live instance is fastest; the secure setting covers fresh boot and

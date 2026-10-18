@@ -32,10 +32,10 @@
 
      Runtime note: capabilities are not settable through the public API, so their
      absence here is absolute. takeScreenshot() cannot succeed in this build;
-     ScreenshotAccessibilityService detects that and routes full-screen captures to
+     TileAccessibilityService detects that and routes full-screen captures to
      performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT) (the system takes and saves
      the shot, no consent) and region/paint captures to MediaProjection (consent
-     dialog). See ScreenshotAccessibilityService.handleRequest().
+     dialog). See TileAccessibilityService.handleRequest().
 
      One trap when reading the built APK: attributes newer than minSdk (21) exist
      only in the -v22 resource variant, because aapt2 strips them out of the base
