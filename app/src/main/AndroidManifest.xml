@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.snaptile.app">
+    package="com.tile.app">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -64,7 +64,7 @@
         </activity>
 
         <service
-            android:name=".ScreenshotTileService"
+            android:name=".TileActionService"
             android:exported="true"
             android:icon="@drawable/ic_tile_screenshot"
             android:label="@string/tile_label"
@@ -75,7 +75,7 @@
         </service>
 
         <activity
-            android:name=".ScreenshotChooserActivity"
+            android:name=".TileChooserActivity"
             android:exported="false"
             android:theme="@style/TransparentDialogTheme"
             android:excludeFromRecents="true"
@@ -83,7 +83,7 @@
             android:launchMode="singleTop" />
 
         <activity
-            android:name=".CaptureActivity"
+            android:name=".ProjectionActivity"
             android:exported="false"
             android:theme="@style/TransparentTheme"
             android:excludeFromRecents="true"
@@ -91,7 +91,7 @@
             android:launchMode="singleTop" />
 
         <activity
-            android:name=".SnipActivity"
+            android:name=".EditorActivity"
             android:exported="false"
             android:theme="@style/FullscreenTheme"
             android:excludeFromRecents="true"
@@ -109,7 +109,7 @@
             android:label="@string/setup_title" />
 
         <!-- Legacy capture path. Required by Android for MediaProjection, used by
-             CaptureActivity: consent first, then this service establishes the
+             ProjectionActivity: consent first, then this service establishes the
              foreground context before getMediaProjection() is allowed on
              targetSdk 34. Declared again as of 1.2.0 — see the permission note
              above. Nothing about the accessibility method depends on it. -->
@@ -127,7 +127,7 @@
              that test came back negative, and a second accessibility entry in a
              shipped app is a liability rather than a feature. -->
         <service
-            android:name=".ScreenshotAccessibilityService"
+            android:name=".TileAccessibilityService"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

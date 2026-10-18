@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SnapTile</string>
-    <string name="tile_label">SnapTile</string>
+    <string name="app_name">Tile</string>
+    <string name="tile_label">Tile</string>
     <string name="take_screenshot">Take Screenshot</string>
     <string name="full_screen">Full Screen</string>
     <string name="region_select">Select Region</string>
@@ -15,7 +15,7 @@
     <string name="notification_text">Ready to capture</string>
     <string name="drag_to_select">Drag to select region</string>
     <string name="capture_region">Capture</string>
-    <string name="accessibility_desc">SnapTile uses an accessibility service only to take screenshots when you tap the Quick Settings tile. No other data is collected.</string>
+    <string name="accessibility_desc">This app uses an accessibility service to perform the action of its Quick Settings tile. Nothing else is read and no data is collected.</string>
     <string name="enable_accessibility_title">Enable screenshot access</string>
     <string name="enable_accessibility_text">SnapTile takes screenshots cleanly via an accessibility service (no screen-recording prompt). Turn it on once under Accessibility → SnapTile.</string>
     <string name="enable_accessibility_btn">Open accessibility settings</string>

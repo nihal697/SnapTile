@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,10 +19,10 @@ import android.widget.TextView;
  * The chooser does not capture anything itself. It only turns the user's selection
  * into one of the mode constants consumed by the screenshot flow.
  *
- * Preferred path is ScreenshotAccessibilityService (no MediaProjection consent).
- * CaptureActivity (MediaProjection) is kept only as a pre-API-28 fallback.
+ * Preferred path is TileAccessibilityService (no MediaProjection consent).
+ * ProjectionActivity (MediaProjection) is kept only as a pre-API-28 fallback.
  */
-public class ScreenshotChooserActivity extends Activity {
+public class TileChooserActivity extends Activity {
 
     public static final String EXTRA_MODE      = "mode";
     public static final String MODE_FULL       = "full";
@@ -106,7 +106,7 @@ public class ScreenshotChooserActivity extends Activity {
         // Give the chooser dialog time to fully detach before capturing.
         // The old MediaProjection path took 850ms+ (consent + VirtualDisplay
         // setup), which hid this race. The accessibility path fires in ~50ms,
-        // so SnipActivity used to land underneath the still-visible dialog.
+        // so EditorActivity used to land underneath the still-visible dialog.
         // Which method runs is the user's setting, not this dialog's decision.
         new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(
                 () -> CapturePrefs.request(this, mode), 350);

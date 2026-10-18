@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.content.Intent;
 import android.service.quicksettings.Tile;
@@ -11,11 +11,11 @@ import android.service.quicksettings.TileService;
  * capture flow owns the temporary state needed for the actual screenshot.
  *
  * The tile never forces the user into system Accessibility settings: when the
- * screenshot service is off, ScreenshotChooserActivity falls back to the
+ * screenshot service is off, TileChooserActivity falls back to the
  * MediaProjection path. That keeps accessibility switchable to OFF for
  * banking/UPI apps without breaking any capture mode.
  */
-public class ScreenshotTileService extends TileService {
+public class TileActionService extends TileService {
 
     @Override
     public void onStartListening() {
@@ -25,7 +25,7 @@ public class ScreenshotTileService extends TileService {
 
     @Override
     public void onClick() {
-        Intent i = new Intent(this, ScreenshotChooserActivity.class);
+        Intent i = new Intent(this, TileChooserActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (android.os.Build.VERSION.SDK_INT >= 34) {
             android.app.PendingIntent pi = android.app.PendingIntent.getActivity(

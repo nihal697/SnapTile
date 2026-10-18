@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.ComponentName;
@@ -30,7 +30,7 @@ import androidx.annotation.RequiresApi;
  *  - API 28-29 : performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT) triggers the
  *              system screenshot UI. System owns save/share, so only full-screen
  *              mode can use it.
- *  - API <28 : no accessibility screenshot API — MediaProjection (CaptureActivity).
+ *  - API <28 : no accessibility screenshot API — MediaProjection (ProjectionActivity).
  *
  * Whether this path runs at all is the user's choice in {@link CapturePrefs}: with
  * the legacy method selected, capture never reaches this service. When it does
@@ -41,10 +41,10 @@ import androidx.annotation.RequiresApi;
  * Tile / chooser never call the platform APIs directly; only the bound
  * AccessibilityService instance can. They go through requestScreenshot().
  */
-public class ScreenshotAccessibilityService extends AccessibilityService {
+public class TileAccessibilityService extends AccessibilityService {
 
-    private static ScreenshotAccessibilityService sInstance;
-    private static String sPendingMode = ScreenshotChooserActivity.MODE_FULL;
+    private static TileAccessibilityService sInstance;
+    private static String sPendingMode = TileChooserActivity.MODE_FULL;
 
     /** Called from Tile / Chooser. Returns false when the service is not enabled. */
     public static boolean requestScreenshot(String mode) {
@@ -78,7 +78,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
     public static boolean disableForBanking() {
         // disableSelf() was added in API 24 (Nougat).
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return false;
-        ScreenshotAccessibilityService svc = sInstance;
+        TileAccessibilityService svc = sInstance;
         if (svc == null) return false;
         try {
             svc.disableSelf();
@@ -152,12 +152,12 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
             if (hasScreenshotCapability()) {
                 // Full screen: let the system take and save it (shows native UI, no toast).
                 // Region / full+paint: we need the bitmap in-app for crop/draw, so use takeScreenshot().
-                if (ScreenshotChooserActivity.MODE_FULL.equals(sPendingMode)) {
+                if (TileChooserActivity.MODE_FULL.equals(sPendingMode)) {
                     systemScreenshot();
                 } else {
                     takeScreenshotCompat();
                 }
-            } else if (ScreenshotChooserActivity.MODE_FULL.equals(sPendingMode)) {
+            } else if (TileChooserActivity.MODE_FULL.equals(sPendingMode)) {
                 // No capability (OEM withheld it despite the config). A global action
                 // needs no capability, so let the system take the shot and own the
                 // result — the same route as API 28-29. Region and paint modes need
@@ -168,7 +168,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
                 startLegacyCapture();
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            if (ScreenshotChooserActivity.MODE_FULL.equals(sPendingMode)) {
+            if (TileChooserActivity.MODE_FULL.equals(sPendingMode)) {
                 systemScreenshot();
             } else {
                 startLegacyCapture();
@@ -231,7 +231,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
                                 toast("Capture failed");
                                 return;
                             }
-                            // Copy to a mutable software bitmap so SnipActivity
+                            // Copy to a mutable software bitmap so EditorActivity
                             // can edit / recycle freely (matches old ImageReader path).
                             Bitmap sw = hw.copy(Bitmap.Config.ARGB_8888, true);
                             if (sw == null) {
@@ -254,15 +254,15 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
     }
 
     private void routeBitmap(Bitmap bmp) {
-        String mode = sPendingMode != null ? sPendingMode : ScreenshotChooserActivity.MODE_FULL;
-        if (ScreenshotChooserActivity.MODE_FULL_PAINT.equals(mode)) {
-            CaptureActivity.pendingBitmap = bmp;
-            startActivity(new Intent(this, SnipActivity.class)
+        String mode = sPendingMode != null ? sPendingMode : TileChooserActivity.MODE_FULL;
+        if (TileChooserActivity.MODE_FULL_PAINT.equals(mode)) {
+            ProjectionActivity.pendingBitmap = bmp;
+            startActivity(new Intent(this, EditorActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(SnipActivity.EXTRA_FULL_PAINT, true));
-        } else if (ScreenshotChooserActivity.MODE_REGION.equals(mode)) {
-            CaptureActivity.pendingBitmap = bmp;
-            startActivity(new Intent(this, SnipActivity.class)
+                    .putExtra(EditorActivity.EXTRA_FULL_PAINT, true));
+        } else if (TileChooserActivity.MODE_REGION.equals(mode)) {
+            ProjectionActivity.pendingBitmap = bmp;
+            startActivity(new Intent(this, EditorActivity.class)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         } else {
             ImageSaver.save(this, bmp);
@@ -278,8 +278,8 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
             toast("SnapTile cannot capture on this build — reinstall it");
             return;
         }
-        Intent i = new Intent(this, CaptureActivity.class);
-        i.putExtra(ScreenshotChooserActivity.EXTRA_MODE, sPendingMode);
+        Intent i = new Intent(this, ProjectionActivity.class);
+        i.putExtra(TileChooserActivity.EXTRA_MODE, sPendingMode);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
@@ -306,7 +306,7 @@ public class ScreenshotAccessibilityService extends AccessibilityService {
 
     private void toast(String msg) {
         new Handler(Looper.getMainLooper()).post(() ->
-                Toast.makeText(ScreenshotAccessibilityService.this,
+                Toast.makeText(TileAccessibilityService.this,
                         msg, Toast.LENGTH_SHORT).show());
     }
 }

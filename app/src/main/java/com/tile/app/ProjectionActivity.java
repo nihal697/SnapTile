@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -36,11 +36,11 @@ import java.nio.ByteBuffer;
  *
  * After the frame is obtained, the projection is released immediately. Full-screen
  * captures are handed to {ImageSaver}; region and full-paint modes pass the
- * bitmap to {SnipActivity} for editing.
+ * bitmap to {EditorActivity} for editing.
  */
-public class CaptureActivity extends Activity {
+public class ProjectionActivity extends Activity {
 
-    private static final String TAG = "CaptureActivity";
+    private static final String TAG = "ProjectionActivity";
     private static final int    REQ = 1001;
 
     /** 40 polls x 50 ms = 2 s ceiling for the mediaProjection FGS to reach the foreground. */
@@ -66,8 +66,8 @@ public class CaptureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMode = getIntent().getStringExtra(ScreenshotChooserActivity.EXTRA_MODE);
-        if (mMode == null) mMode = ScreenshotChooserActivity.MODE_FULL;
+        mMode = getIntent().getStringExtra(TileChooserActivity.EXTRA_MODE);
+        if (mMode == null) mMode = TileChooserActivity.MODE_FULL;
 
         // This activity only exists to drive MediaProjection. In a build that does
         // not declare ProjectionService / the mediaProjection foreground-service
@@ -204,19 +204,19 @@ public class CaptureActivity extends Activity {
                     releaseCapture();
 
                     String mode = mMode;
-                    if (ScreenshotChooserActivity.MODE_REGION.equals(mode)) {
+                    if (TileChooserActivity.MODE_REGION.equals(mode)) {
                         pendingBitmap = bmp;
                         runOnUiThread(() -> {
-                            startActivity(new Intent(this, SnipActivity.class)
+                            startActivity(new Intent(this, EditorActivity.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             done();
                         });
-                    } else if (ScreenshotChooserActivity.MODE_FULL_PAINT.equals(mode)) {
+                    } else if (TileChooserActivity.MODE_FULL_PAINT.equals(mode)) {
                         pendingBitmap = bmp;
                         runOnUiThread(() -> {
-                            startActivity(new Intent(this, SnipActivity.class)
+                            startActivity(new Intent(this, EditorActivity.class)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    .putExtra(SnipActivity.EXTRA_FULL_PAINT, true));
+                                    .putExtra(EditorActivity.EXTRA_FULL_PAINT, true));
                             done();
                         });
                     } else {

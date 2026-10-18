@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +35,7 @@ import java.util.List;
  * to {PaintCanvas}, where strokes are drawn over the bitmap and can be undone or
  * redone before the final PNG is written by {ImageSaver}.
  */
-public class SnipActivity extends Activity {
+public class EditorActivity extends Activity {
 
     public static final String EXTRA_FULL_PAINT = "full_paint";
 
@@ -59,7 +59,7 @@ public class SnipActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (CaptureActivity.pendingBitmap == null || CaptureActivity.pendingBitmap.isRecycled()) {
+        if (ProjectionActivity.pendingBitmap == null || ProjectionActivity.pendingBitmap.isRecycled()) {
             Toast.makeText(this, "No screenshot available", Toast.LENGTH_SHORT).show();
             finish(); return;
         }
@@ -70,9 +70,9 @@ public class SnipActivity extends Activity {
         FrameLayout root = new FrameLayout(this);
 
         if (mFullPaint) {
-            mEditBitmap = CaptureActivity.pendingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            CaptureActivity.pendingBitmap.recycle();
-            CaptureActivity.pendingBitmap = null;
+            mEditBitmap = ProjectionActivity.pendingBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            ProjectionActivity.pendingBitmap.recycle();
+            ProjectionActivity.pendingBitmap = null;
             buildPaintPhase(root);
         } else {
             buildSnipPhase(root);
@@ -86,7 +86,7 @@ public class SnipActivity extends Activity {
     // =========================================================================
 
     private void buildSnipPhase(FrameLayout root) {
-        mSnipView = new SnipView(this, CaptureActivity.pendingBitmap);
+        mSnipView = new SnipView(this, ProjectionActivity.pendingBitmap);
         root.addView(mSnipView, mp());
 
         // Bottom-centered thumb-reach bar: dismiss / save instantly / save + annotate.
@@ -133,7 +133,7 @@ public class SnipActivity extends Activity {
      */
     private void saveSnipInstantly() {
         Rect sel = mSnipView != null ? mSnipView.getSelection() : null;
-        Bitmap src = CaptureActivity.pendingBitmap;
+        Bitmap src = ProjectionActivity.pendingBitmap;
         if (sel == null || src == null || src.isRecycled()) return;
 
         int l = clamp(sel.left,   0, src.getWidth()  - 1);
@@ -156,7 +156,7 @@ public class SnipActivity extends Activity {
      */
     private void confirmSnip(FrameLayout root) {
         Rect sel = mSnipView.getSelection();
-        Bitmap src = CaptureActivity.pendingBitmap;
+        Bitmap src = ProjectionActivity.pendingBitmap;
         if (sel == null || src == null) return;
 
         int l = clamp(sel.left,   0, src.getWidth()  - 1);
@@ -165,7 +165,7 @@ public class SnipActivity extends Activity {
         int b = clamp(sel.bottom, t + 1, src.getHeight());
         mEditBitmap = Bitmap.createBitmap(src, l, t, r - l, b - t);
         src.recycle();
-        CaptureActivity.pendingBitmap = null;
+        ProjectionActivity.pendingBitmap = null;
 
         mSnipView.setVisibility(View.GONE);
         if (mSnipActionBar != null) mSnipActionBar.setVisibility(View.GONE);
@@ -409,9 +409,9 @@ public class SnipActivity extends Activity {
     @Override protected void onDestroy()  { cleanup(); super.onDestroy(); }
 
     private void cleanup() {
-        if (CaptureActivity.pendingBitmap != null && !CaptureActivity.pendingBitmap.isRecycled()) {
-            CaptureActivity.pendingBitmap.recycle();
-            CaptureActivity.pendingBitmap = null;
+        if (ProjectionActivity.pendingBitmap != null && !ProjectionActivity.pendingBitmap.isRecycled()) {
+            ProjectionActivity.pendingBitmap.recycle();
+            ProjectionActivity.pendingBitmap = null;
         }
         if (mEditBitmap != null && !mEditBitmap.isRecycled()) {
             mEditBitmap.recycle();

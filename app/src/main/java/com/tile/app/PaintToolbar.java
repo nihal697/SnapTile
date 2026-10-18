@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,7 +25,7 @@ import java.util.Deque;
  *
  * This class encapsulates an older/reusable editor implementation: it builds a
  * toolbar, manages paint-mode input, and can flatten recorded strokes onto a bitmap.
- * The current {SnipActivity} editor builds its UI directly, so this helper is
+ * The current {EditorActivity} editor builds its UI directly, so this helper is
  * kept independent rather than being part of the active capture path.
  */
 public class PaintToolbar {

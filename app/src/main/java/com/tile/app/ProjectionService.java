@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -10,7 +10,7 @@ import android.os.IBinder;
 /**
  * Short-lived foreground service required by Android for media projection capture.
  *
- * The service intentionally contains no capture logic. {CaptureActivity} owns
+ * The service intentionally contains no capture logic. {ProjectionActivity} owns
  * the projection and frame lifecycle; this service only establishes the foreground
  * execution context required by the platform and is stopped after the one-shot
  * capture finishes.
@@ -24,8 +24,8 @@ public class ProjectionService extends Service {
      * True between onCreate() and onDestroy().
      *
      * Android 14 (targetSdk 34) only allows MediaProjectionManager.getMediaProjection()
-     * after this service is actually running, and CaptureActivity now starts the service
-     * *after* the consent dialog (also an Android 14 requirement). CaptureActivity polls
+     * after this service is actually running, and ProjectionActivity now starts the service
+     * *after* the consent dialog (also an Android 14 requirement). ProjectionActivity polls
      * this flag instead of sleeping on a fixed delay.
      */
     private static volatile boolean sRunning = false;
@@ -63,7 +63,7 @@ public class ProjectionService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // Nothing — CaptureActivity drives everything
+        // Nothing — ProjectionActivity drives everything
         return START_NOT_STICKY;
     }
 

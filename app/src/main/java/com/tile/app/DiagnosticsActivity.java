@@ -1,4 +1,4 @@
-package com.snaptile.app;
+package com.tile.app;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Activity;
